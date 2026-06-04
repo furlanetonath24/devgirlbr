@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevGirlBR— Programação para meninas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rosa: #E8477A;
+    --rosa-claro: #FCEEF4;
+    --lilas: #7C5CBF;
+    --lilas-claro: #EDE8F9;
+    --verde: #1BAD7F;
+    --escuro: #1A1230;
+    --cinza: #6B6880;
+    --branco: #FDFCFF;
+    --borda: #EAE8F0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--branco);
+    color: var(--escuro);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 6vw;
+    background: rgba(253,252,255,.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--borda);
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem;
+    color: var(--escuro);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--rosa); display: inline-block; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { text-decoration: none; font-size: .9rem; color: var(--cinza); font-weight: 400; transition: color .2s; }
+  .nav-links a:hover { color: var(--rosa); }
+  .nav-cta {
+    background: var(--rosa); color: #fff;
+    border: none; border-radius: 100px;
+    padding: 10px 22px; font-size: .875rem; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: background .2s, transform .15s;
+  }
+  .nav-cta:hover { background: #cc3065; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 40px;
+    padding: 120px 6vw 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #FCEEF4 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--lilas-claro); color: var(--lilas);
+    border-radius: 100px; padding: 6px 14px;
+    font-size: .8rem; font-weight: 500;
+    margin-bottom: 24px;
+    animation: fadeUp .6s ease both;
+  }
+  .hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: var(--lilas); }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+    line-height: 1.15;
+    margin-bottom: 20px;
+    animation: fadeUp .6s .1s ease both;
+  }
+  .hero h1 em { font-style: italic; color: var(--rosa); }
+  .hero-desc {
+    font-size: 1.05rem; color: var(--cinza); max-width: 480px;
+    margin-bottom: 36px; font-weight: 300; line-height: 1.75;
+    animation: fadeUp .6s .2s ease both;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp .6s .3s ease both; }
+  .btn-primary {
+    background: var(--rosa); color: #fff;
+    border: none; border-radius: 100px;
+    padding: 14px 30px; font-size: 1rem; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: background .2s, transform .15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: #cc3065; transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--escuro);
+    border: 1.5px solid var(--borda); border-radius: 100px;
+    padding: 14px 28px; font-size: 1rem; font-weight: 400;
+    cursor: pointer; font-family: inherit;
+    transition: border-color .2s, color .2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--rosa); color: var(--rosa); }
+
+  /* hero visual */
+  .hero-visual { animation: fadeUp .6s .25s ease both; }
+  .code-window {
+    background: var(--escuro);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(26,18,48,.18);
+    position: relative;
+  }
+  .code-bar {
+    background: #2A2040;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .code-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .code-dot:nth-child(1) { background: #FF5F57; }
+  .code-dot:nth-child(2) { background: #FEBC2E; }
+  .code-dot:nth-child(3) { background: #28C840; }
+  .code-filename { margin-left: 8px; font-size: .78rem; color: #8882A8; font-family: 'DM Mono', monospace; }
+  pre {
+    padding: 24px 24px 28px;
+    font-size: .82rem;
+    line-height: 1.8;
+    overflow: auto;
+    font-family: 'Courier New', monospace;
+  }
+  .kw { color: #C792EA; }
+  .cls { color: #82AAFF; }
+  .str { color: #C3E88D; }
+  .com { color: #546E7A; font-style: italic; }
+  .prop { color: #F78C6C; }
+  .val { color: #89DDFF; }
+  .typing-cursor {
+    display: inline-block;
+    width: 2px; height: 1em;
+    background: var(--rosa);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  /* ── STATS ── */
+  .stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--borda);
+    border-top: 1px solid var(--borda); border-bottom: 1px solid var(--borda);
+  }
+  .stat {
+    background: var(--branco);
+    padding: 32px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem; color: var(--rosa);
+  }
+  .stat-label { font-size: .85rem; color: var(--cinza); margin-top: 4px; }
+
+  /* ── SEÇÃO GENÉRICA ── */
+  section { padding: 80px 6vw; }
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: .78rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--rosa); margin-bottom: 12px;
+  }
+  .section-tag::before { content: ''; width: 24px; height: 2px; background: var(--rosa); border-radius: 2px; }
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1.2; margin-bottom: 14px;
+  }
+  h2 em { font-style: italic; color: var(--rosa); }
+  .section-desc { font-size: 1rem; color: var(--cinza); max-width: 520px; line-height: 1.75; margin-bottom: 48px; }
+
+  /* ── TRILHA ── */
+  .trilha { background: var(--escuro); color: var(--branco); }
+  .trilha .section-tag { color: #C792EA; }
+  .trilha .section-tag::before { background: #C792EA; }
+  .trilha h2 { color: var(--branco); }
+  .trilha .section-desc { color: #9490B0; }
+  .trilha-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .trilha-card {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px; padding: 24px;
+    transition: background .2s, transform .2s;
+    cursor: default;
+  }
+  .trilha-card:hover { background: rgba(255,255,255,.09); transform: translateY(-4px); }
+  .trilha-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem; color: var(--rosa); margin-bottom: 12px;
+  }
+  .trilha-nome { font-size: 1rem; font-weight: 500; margin-bottom: 8px; }
+  .trilha-desc { font-size: .85rem; color: #9490B0; line-height: 1.65; }
+  .trilha-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tag-chip {
+    background: rgba(255,255,255,.08); color: #C792EA;
+    border-radius: 100px; padding: 4px 10px; font-size: .73rem;
+  }
+
+  /* ── TUTORIAIS DESTAQUE ── */
+  .tutoriais-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .tut-card {
+    border: 1px solid var(--borda); border-radius: 16px; overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+    cursor: pointer;
+  }
+  .tut-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(26,18,48,.1); }
+  .tut-thumb {
+    height: 140px; display: flex; align-items: center; justify-content: center;
+    font-size: 2.8rem;
+  }
+  .tut-thumb.rosa { background: var(--rosa-claro); }
+  .tut-thumb.lilas { background: var(--lilas-claro); }
+  .tut-thumb.verde { background: #E3F8F2; }
+  .tut-body { padding: 18px; }
+  .tut-nivel {
+    font-size: .72rem; font-weight: 500; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--rosa); margin-bottom: 8px;
+  }
+  .tut-titulo { font-size: 1rem; font-weight: 500; margin-bottom: 8px; line-height: 1.4; }
+  .tut-meta { font-size: .8rem; color: var(--cinza); }
+
+  /* ── INSPIRAÇÕES ── */
+  .inspiracoes { background: var(--rosa-claro); }
+  .insp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .insp-card {
+    background: var(--branco); border-radius: 16px; padding: 24px;
+    border: 1px solid rgba(232,71,122,.15);
+    transition: transform .2s;
+  }
+  .insp-card:hover { transform: translateY(-3px); }
+  .insp-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 14px;
+  }
+  .insp-nome { font-weight: 500; font-size: 1rem; margin-bottom: 4px; }
+  .insp-area { font-size: .82rem; color: var(--rosa); margin-bottom: 10px; }
+  .insp-frase { font-size: .85rem; color: var(--cinza); font-style: italic; line-height: 1.6; }
+
+  /* ── NEWSLETTER ── */
+  .newsletter { text-align: center; background: var(--lilas-claro); }
+  .newsletter h2 { margin: 0 auto 12px; }
+  .newsletter .section-desc { margin: 0 auto 32px; text-align: center; }
+  .nl-form {
+    display: flex; gap: 12px; justify-content: center;
+    flex-wrap: wrap; max-width: 480px; margin: 0 auto;
+  }
+  .nl-input {
+    flex: 1; min-width: 220px;
+    border: 1.5px solid var(--borda); border-radius: 100px;
+    padding: 13px 20px; font-size: .95rem; font-family: inherit;
+    outline: none; transition: border-color .2s;
+    background: var(--branco);
+  }
+  .nl-input:focus { border-color: var(--lilas); }
+  .nl-input::placeholder { color: var(--cinza); }
+  .btn-lilas {
+    background: var(--lilas); color: #fff;
+    border: none; border-radius: 100px;
+    padding: 13px 26px; font-size: .95rem; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: background .2s;
+  }
+  .btn-lilas:hover { background: #6349a8; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--escuro); color: #9490B0;
+    padding: 48px 6vw 32px;
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: end; gap: 32px;
+  }
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem; color: var(--branco);
+    margin-bottom: 10px;
+  }
+  .footer-desc { font-size: .85rem; max-width: 340px; line-height: 1.7; }
+  .footer-links { display: flex; gap: 24px; list-style: none; }
+  .footer-links a { color: #9490B0; text-decoration: none; font-size: .85rem; transition: color .2s; }
+  .footer-links a:hover { color: var(--rosa); }
+  .footer-copy { grid-column: 1/-1; font-size: .78rem; margin-top: 32px; border-top: 1px solid #2A2040; padding-top: 24px; }
+
+  /* ── ANIMAÇÕES ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVO ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding-top: 100px; }
+    .hero-visual { display: none; }
+    .trilha-grid, .tutoriais-grid, .insp-grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr; }
+    .footer-links { flex-wrap: wrap; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo"><span class="logo-dot"></span>DevGirlBR</a>
+  <ul class="nav-links">
+    <li><a href="#tutoriais">Tutoriais</a></li>
+    <li><a href="#trilha">Trilha</a></li>
+    <li><a href="#inspiracoes">Inspirações</a></li>
+    <li><a href="#comunidade">Comunidade</a></li>
+  </ul>
+  <button class="nav-cta">Começar agora</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow"><span></span> Programação para meninas</div>
+    <h1>Código é coisa<br>de <em>menina,</em> sim.</h1>
+    <p class="hero-desc">
+      Aprenda a programar do zero com tutoriais em português,
+      trilha de aprendizado guiada e uma comunidade que torce por você.
+    </p>
+    <div class="hero-actions">
+      <a href="#trilha" class="btn-primary">Explorar a trilha</a>
+      <a href="#tutoriais" class="btn-outline">Ver tutoriais</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="code-window">
+      <div class="code-bar">
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-filename">meu-primeiro-site.html</span>
+      </div>
+      <pre><span class="com">&lt;!-- Meu primeiro site ✨ --&gt;</span>
+<span class="kw">&lt;!DOCTYPE</span> <span class="cls">html</span><span class="kw">&gt;</span>
+<span class="kw">&lt;html</span> <span class="prop">lang</span>=<span class="str">"pt-BR"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Meu Site<span class="kw">&lt;/title&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+
+  <span class="kw">&lt;h1&gt;</span>Olá, mundo! <span class="str">👩‍💻</span><span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;p&gt;</span>Programação é para
+    <span class="kw">&lt;strong&gt;</span>todas nós.<span class="kw">&lt;/strong&gt;&lt;/p&gt;</span>
+
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span><span class="typing-cursor"></span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat reveal">
+    <div class="stat-num">20+</div>
+    <div class="stat-label">Tutoriais gratuitos</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num">3</div>
+    <div class="stat-label">Trilhas de aprendizado</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Em português</div>
+  </div>
+</div>
+
+<!-- TRILHA -->
+<section class="trilha" id="trilha">
+  <div class="section-tag">Trilha de aprendizado</div>
+  <h2>Do zero ao seu<br>primeiro <em>portfólio</em></h2>
+  <p class="section-desc">Uma jornada estruturada para você aprender no seu ritmo, com conteúdo feito por quem passou pelo mesmo caminho.</p>
+  <div class="trilha-grid reveal">
+    <div class="trilha-card">
+      <div class="trilha-num">01</div>
+      <div class="trilha-nome">Fundamentos</div>
+      <div class="trilha-desc">Entenda como a web funciona e crie sua primeira página com HTML e CSS do zero.</div>
+      <div class="trilha-tags">
+        <span class="tag-chip">HTML</span>
+        <span class="tag-chip">CSS</span>
+        <span class="tag-chip">Lógica</span>
+      </div>
+    </div>
+    <div class="trilha-card">
+      <div class="trilha-num">02</div>
+      <div class="trilha-nome">Interatividade</div>
+      <div class="trilha-desc">Dê vida ao seu site com JavaScript: eventos, funções e seu primeiro projeto dinâmico.</div>
+      <div class="trilha-tags">
+        <span class="tag-chip">JavaScript</span>
+        <span class="tag-chip">DOM</span>
+        <span class="tag-chip">Projeto</span>
+      </div>
+    </div>
+    <div class="trilha-card">
+      <div class="trilha-num">03</div>
+      <div class="trilha-nome">Portfólio</div>
+      <div class="trilha-desc">Monte seu portfólio profissional e publique seus projetos no ar com GitHub Pages.</div>
+      <div class="trilha-tags">
+        <span class="tag-chip">Git</span>
+        <span class="tag-chip">GitHub</span>
+        <span class="tag-chip">Deploy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TUTORIAIS -->
+<section id="tutoriais">
+  <div class="section-tag">Tutoriais em destaque</div>
+  <h2>Aprenda fazendo,<br>passo a <em>passo</em></h2>
+  <p class="section-desc">Todos os tutoriais são gratuitos, em português e feitos para quem está começando agora.</p>
+  <div class="tutoriais-grid reveal">
+    <div class="tut-card">
+      <div class="tut-thumb rosa">💻</div>
+      <div class="tut-body">
+        <div class="tut-nivel">Iniciante · 20 min</div>
+        <div class="tut-titulo">Sua primeira página HTML em 20 minutos</div>
+        <div class="tut-meta">HTML · CSS básico</div>
+      </div>
+    </div>
+    <div class="tut-card">
+      <div class="tut-thumb lilas">🎨</div>
+      <div class="tut-body">
+        <div class="tut-nivel">Iniciante · 30 min</div>
+        <div class="tut-titulo">Deixe seu site bonito com CSS Flexbox</div>
+        <div class="tut-meta">CSS · Flexbox · Layout</div>
+      </div>
+    </div>
+    <div class="tut-card">
+      <div class="tut-thumb verde">⚡</div>
+      <div class="tut-body">
+        <div class="tut-nivel">Intermediário · 45 min</div>
+        <div class="tut-titulo">Crie um quiz interativo com JavaScript</div>
+        <div class="tut-meta">JavaScript · DOM · Lógica</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSPIRAÇÕES -->
+<section class="inspiracoes" id="inspiracoes">
+  <div class="section-tag">Mulheres na tech</div>
+  <h2>Elas mostraram<br>que é <em>possível</em></h2>
+  <p class="section-desc">Conheça mulheres que transformaram a tecnologia e abriram caminho para todas nós.</p>
+  <div class="insp-grid reveal">
+    <div class="insp-card">
+      <div class="insp-avatar" style="background:#FCEEF4">🚀</div>
+      <div class="insp-nome">Ada Lovelace</div>
+      <div class="insp-area">Pioneira da computação</div>
+      <div class="insp-frase">"A imaginação é a faculdade da descoberta por excelência."</div>
+    </div>
+    <div class="insp-card">
+      <div class="insp-avatar" style="background:#EDE8F9">💡</div>
+      <div class="insp-nome">Grace Hopper</div>
+      <div class="insp-area">Inventora do compilador</div>
+      <div class="insp-frase">"É muito mais fácil pedir desculpas do que pedir permissão."</div>
+    </div>
+    <div class="insp-card">
+      <div class="insp-avatar" style="background:#E3F8F2">🌍</div>
+      <div class="insp-nome">Katherine Johnson</div>
+      <div class="insp-area">Matemática da NASA</div>
+      <div class="insp-frase">"Eu contava tudo. Os passos, os pratos, as estrelas no céu."</div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter" id="comunidade">
+  <div class="section-tag" style="justify-content:center">Comunidade</div>
+  <h2>Toda semana,<br>um novo <em>passo</em></h2>
+  <p class="section-desc">Receba tutoriais, dicas de carreira e histórias de mulheres incríveis direto no seu e-mail. De graça.</p>
+  <form class="nl-form" onsubmit="handleSubmit(event)">
+    <input class="nl-input" type="email" placeholder="seu@email.com" required>
+    <button type="submit" class="btn-lilas">Quero participar</button>
+  </form>
+  <p id="nl-msg" style="margin-top:16px;font-size:.85rem;color:var(--lilas);display:none">
+    Incrível! Te vejo na próxima edição 🎉
+  </p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">DevGirlBR</div>
+    <p class="footer-desc">Um projeto feito com amor por uma futura Engenheira de Software, para todas as meninas que ainda não sabem que programação é para elas.</p>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#tutoriais">Tutoriais</a></li>
+    <li><a href="#trilha">Trilha</a></li>
+    <li><a href="#">Instagram</a></li>
+    <li><a href="#">Sobre</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 DevGirlBR · Feito com 💜 em São Paulo</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Newsletter
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('nl-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+
+</body>
+</html>
