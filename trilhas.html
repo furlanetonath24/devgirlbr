@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trilha de Aprendizado — DevGirl BR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rosa: #E8477A;
+    --rosa-claro: #FCEEF4;
+    --lilas: #7C5CBF;
+    --lilas-claro: #EDE8F9;
+    --verde: #1BAD7F;
+    --escuro: #1A1230;
+    --escuro2: #2A2040;
+    --escuro3: #221838;
+    --cinza: #6B6880;
+    --branco: #FDFCFF;
+    --borda: #EAE8F0;
+    --borda-escura: rgba(255,255,255,.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--escuro);
+    color: var(--branco);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 6vw;
+    background: rgba(26,18,48,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--borda-escura);
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem; color: var(--branco);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--rosa); display: inline-block; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { text-decoration: none; font-size: .9rem; color: rgba(255,255,255,.55); font-weight: 400; transition: color .2s; }
+  .nav-links a:hover, .nav-links a.ativa { color: var(--rosa); }
+  .nav-cta {
+    background: var(--rosa); color: #fff;
+    border: none; border-radius: 100px;
+    padding: 10px 22px; font-size: .875rem; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    text-decoration: none;
+    transition: background .2s, transform .15s;
+  }
+  .nav-cta:hover { background: #cc3065; transform: translateY(-1px); }
+
+  /* ── HERO DA TRILHA ── */
+  .trilha-hero {
+    padding: 140px 6vw 80px;
+    position: relative; overflow: hidden;
+  }
+  .trilha-hero::before {
+    content: '';
+    position: absolute; top: -150px; right: -150px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,92,191,.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: .78rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--rosa); margin-bottom: 16px;
+  }
+  .section-tag::before { content: ''; width: 24px; height: 2px; background: var(--rosa); border-radius: 2px; }
+  .trilha-hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    line-height: 1.15; margin-bottom: 16px;
+  }
+  .trilha-hero h1 em { font-style: italic; color: var(--rosa); }
+  .trilha-hero p {
+    font-size: 1.05rem; color: rgba(255,255,255,.6);
+    max-width: 520px; font-weight: 300; line-height: 1.75;
+    margin-bottom: 40px;
+  }
+
+  /* ── MÓDULOS ── */
+  .modulos { padding: 0 6vw 100px; }
+
+  .modulo {
+    margin-bottom: 48px;
+    border: 1px solid var(--borda-escura);
+    border-radius: 20px; overflow: hidden;
+  }
+
+  .modulo-header {
+    display: flex; align-items: center; gap: 24px;
+    padding: 28px 32px; cursor: pointer;
+    background: var(--escuro2);
+    transition: background .2s;
+    user-select: none;
+  }
+  .modulo-header:hover { background: var(--escuro3); }
+
+  .modulo-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem; color: var(--rosa); line-height: 1;
+    min-width: 52px;
+  }
+  .modulo-info { flex: 1; }
+  .modulo-nome {
+    font-size: 1.2rem; font-weight: 500; color: var(--branco);
+    margin-bottom: 4px;
+  }
+  .modulo-desc { font-size: .9rem; color: rgba(255,255,255,.5); }
+  .modulo-tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .tag-chip {
+    background: rgba(255,255,255,.07); color: rgba(255,255,255,.6);
+    border-radius: 100px; padding: 4px 12px; font-size: .75rem;
+    border: 1px solid rgba(255,255,255,.1);
+  }
+  .modulo-meta { text-align: right; }
+  .modulo-meta-aulas { font-size: .85rem; color: rgba(255,255,255,.4); margin-bottom: 6px; }
+  .modulo-chevron {
+    font-size: 1.2rem; color: rgba(255,255,255,.3);
+    transition: transform .3s;
+  }
+  .modulo.aberto .modulo-chevron { transform: rotate(180deg); }
+  .modulo-status {
+    display: inline-block;
+    font-size: .72rem; font-weight: 500; padding: 3px 10px;
+    border-radius: 100px; margin-bottom: 8px;
+  }
+  .status-disponivel { background: rgba(27,173,127,.15); color: var(--verde); }
+  .status-breve { background: rgba(255,255,255,.07); color: rgba(255,255,255,.4); }
+
+  /* ── AULAS ── */
+  .modulo-aulas {
+    display: none;
+    border-top: 1px solid var(--borda-escura);
+  }
+  .modulo.aberto .modulo-aulas { display: block; }
+
+  .aula {
+    display: flex; align-items: flex-start; gap: 20px;
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--borda-escura);
+    transition: background .15s;
+    text-decoration: none; color: inherit;
+  }
+  .aula:last-child { border-bottom: none; }
+  .aula:hover { background: rgba(255,255,255,.03); }
+
+  .aula-icone {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0; margin-top: 2px;
+  }
+  .icone-rosa { background: rgba(232,71,122,.15); }
+  .icone-lilas { background: rgba(124,92,191,.15); }
+  .icone-verde { background: rgba(27,173,127,.15); }
+
+  .aula-info { flex: 1; }
+  .aula-num { font-size: .72rem; color: rgba(255,255,255,.35); margin-bottom: 3px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+  .aula-titulo { font-size: .95rem; font-weight: 500; color: var(--branco); margin-bottom: 4px; }
+  .aula-desc { font-size: .83rem; color: rgba(255,255,255,.45); line-height: 1.5; }
+  .aula-meta { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .aula-tempo { font-size: .75rem; color: rgba(255,255,255,.35); display: flex; align-items: center; gap: 4px; }
+  .aula-badge {
+    font-size: .7rem; padding: 2px 8px; border-radius: 100px; font-weight: 500;
+  }
+  .badge-livre { background: rgba(27,173,127,.15); color: var(--verde); }
+  .badge-breve { background: rgba(255,255,255,.07); color: rgba(255,255,255,.35); }
+
+  .aula-seta { color: rgba(255,255,255,.2); font-size: 1rem; margin-top: 4px; transition: color .2s; }
+  .aula:hover .aula-seta { color: var(--rosa); }
+
+  /* ── CTA FINAL ── */
+  .cta-final {
+    text-align: center;
+    padding: 80px 6vw 100px;
+    border-top: 1px solid var(--borda-escura);
+  }
+  .cta-final h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    margin-bottom: 12px;
+  }
+  .cta-final h2 em { font-style: italic; color: var(--rosa); }
+  .cta-final p { font-size: 1rem; color: rgba(255,255,255,.5); max-width: 480px; margin: 0 auto 32px; }
+  .btn-rosa {
+    background: var(--rosa); color: #fff;
+    border: none; border-radius: 100px;
+    padding: 14px 32px; font-size: 1rem; font-weight: 500;
+    cursor: pointer; font-family: inherit; text-decoration: none;
+    display: inline-block;
+    transition: background .2s, transform .15s;
+  }
+  .btn-rosa:hover { background: #cc3065; transform: translateY(-2px); }
+  .btn-outline-branco {
+    background: transparent; color: rgba(255,255,255,.7);
+    border: 1.5px solid rgba(255,255,255,.2); border-radius: 100px;
+    padding: 14px 28px; font-size: 1rem; font-weight: 400;
+    cursor: pointer; font-family: inherit; text-decoration: none;
+    display: inline-block; margin-left: 12px;
+    transition: border-color .2s, color .2s;
+  }
+  .btn-outline-branco:hover { border-color: var(--rosa); color: var(--rosa); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: rgba(0,0,0,.3);
+    color: rgba(255,255,255,.35);
+    padding: 32px 6vw;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--borda-escura);
+    font-size: .82rem;
+  }
+  footer a { color: rgba(255,255,255,.35); text-decoration: none; }
+  footer a:hover { color: var(--rosa); }
+
+
+  /* ── DETALHES DAS AULAS ── */
+  .aula { cursor: pointer; border: 0; width: 100%; font-family: inherit; text-align: left; background: transparent; }
+  .aula:focus-visible { outline: 2px solid var(--rosa); outline-offset: -2px; }
+
+  .lesson-modal {
+    position: fixed; inset: 0; z-index: 200;
+    display: none; align-items: center; justify-content: center;
+    padding: 24px;
+    background: rgba(10, 7, 20, .78);
+    backdrop-filter: blur(8px);
+  }
+  .lesson-modal.aberto { display: flex; }
+
+  .lesson-box {
+    width: min(900px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--escuro2);
+    border: 1px solid var(--borda-escura);
+    border-radius: 22px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.4);
+  }
+  .lesson-top {
+    display: flex; justify-content: space-between; gap: 24px;
+    padding: 30px 34px 22px;
+    border-bottom: 1px solid var(--borda-escura);
+  }
+  .lesson-kicker {
+    color: var(--rosa); text-transform: uppercase; letter-spacing: .08em;
+    font-size: .72rem; font-weight: 600; margin-bottom: 8px;
+  }
+  .lesson-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    line-height: 1.15;
+  }
+  .lesson-close {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border: 1px solid var(--borda-escura); border-radius: 50%;
+    background: transparent; color: rgba(255,255,255,.65);
+    cursor: pointer; font-size: 1.2rem;
+  }
+  .lesson-close:hover { color: #fff; border-color: var(--rosa); }
+  .lesson-body { padding: 30px 34px 36px; }
+  .lesson-intro { color: rgba(255,255,255,.65); font-size: 1rem; margin-bottom: 26px; }
+  .lesson-section { margin-top: 26px; }
+  .lesson-section h3 {
+    font-size: .95rem; color: var(--rosa); margin-bottom: 10px;
+  }
+  .lesson-section p, .lesson-section li {
+    color: rgba(255,255,255,.68); font-size: .9rem; line-height: 1.75;
+  }
+  .lesson-section ul, .lesson-section ol { padding-left: 20px; }
+  .lesson-code {
+    margin-top: 12px; padding: 18px;
+    background: rgba(0,0,0,.25); border: 1px solid var(--borda-escura);
+    border-radius: 12px; overflow-x: auto;
+    font: .82rem/1.7 Consolas, Monaco, monospace;
+    color: rgba(255,255,255,.82);
+  }
+  .lesson-links { display: grid; gap: 10px; margin-top: 12px; }
+  .lesson-link {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 13px 15px; border: 1px solid var(--borda-escura);
+    border-radius: 12px; color: rgba(255,255,255,.75);
+    text-decoration: none; background: rgba(255,255,255,.025);
+  }
+  .lesson-link:hover { border-color: rgba(232,71,122,.55); color: #fff; }
+  .lesson-link small { color: var(--verde); white-space: nowrap; }
+  .lesson-tip {
+    margin-top: 26px; padding: 16px 18px;
+    border-left: 3px solid var(--rosa);
+    background: rgba(232,71,122,.07);
+    border-radius: 0 12px 12px 0;
+  }
+  .lesson-tip strong { display: block; margin-bottom: 4px; color: #fff; }
+  .lesson-tip span { color: rgba(255,255,255,.62); font-size: .87rem; }
+
+  @media (max-width: 600px) {
+    .lesson-modal { padding: 10px; }
+    .lesson-top, .lesson-body { padding-left: 20px; padding-right: 20px; }
+  }
+
+  /* ── ANIMAÇÕES ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVO ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .progresso-geral { flex-wrap: wrap; }
+    .modulo-header { flex-wrap: wrap; }
+    .modulo-meta { text-align: left; }
+    .aula { padding: 16px 20px; }
+    .modulo-header { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo"><span class="logo-dot"></span>DevGirl BR</a>
+  <ul class="nav-links">
+    <li><a href="index.html#tutoriais">Tutoriais</a></li>
+    <li><a href="trilha.html" class="ativa">Trilha</a></li>
+    <li><a href="index.html#inspiracoes">Inspirações</a></li>
+    <li><a href="index.html#comunidade">Comunidade</a></li>
+  </ul>
+  <a href="index.html#comunidade" class="nav-cta">Começar agora</a>
+</nav>
+
+<!-- HERO -->
+<section class="trilha-hero">
+  <div class="section-tag">Trilha de aprendizado</div>
+  <h1>Do zero ao seu<br>primeiro <em>portfólio</em></h1>
+  <p>Uma jornada estruturada para você aprender no seu ritmo, com explicações, projetos e recursos gratuitos selecionados pelo DevGirlsBr.</p>
+</section>
+
+<!-- MÓDULOS -->
+<section class="modulos">
+
+  <!-- MÓDULO 01 -->
+  <div class="modulo aberto reveal" id="mod1">
+    <div class="modulo-header" onclick="toggle('mod1')">
+      <div class="modulo-num">01</div>
+      <div class="modulo-info">
+        <div class="modulo-nome">Fundamentos</div>
+        <div class="modulo-desc">Entenda como a web funciona e crie sua primeira página com HTML e CSS do zero.</div>
+        <div class="modulo-tags">
+          <span class="tag-chip">HTML</span>
+          <span class="tag-chip">CSS</span>
+          <span class="tag-chip">Lógica</span>
+        </div>
+      </div>
+      <div class="modulo-meta">
+        <div class="modulo-status status-disponivel">✦ Disponível</div>
+        <div class="modulo-meta-aulas">5 aulas · ~2h</div>
+        <div class="modulo-chevron">▾</div>
+      </div>
+    </div>
+    <div class="modulo-aulas">
+
+      <button type="button" class="aula" data-lesson="internet">
+        <div class="aula-icone icone-rosa">🌐</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 01.1</div>
+          <div class="aula-titulo">Como a internet funciona?</div>
+          <div class="aula-desc">Entenda o que acontece quando você digita um endereço no navegador — de forma simples e visual.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 15 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+        <div class="aula-seta">→</div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="html">
+        <div class="aula-icone icone-rosa">📄</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 01.2</div>
+          <div class="aula-titulo">Sua primeira página HTML</div>
+          <div class="aula-desc">Crie do zero uma página web com estrutura, títulos, parágrafos e links. Tudo no bloco de notas.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 20 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+        <div class="aula-seta">→</div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="css">
+        <div class="aula-icone icone-rosa">🎨</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 01.3</div>
+          <div class="aula-titulo">Deixando bonito com CSS</div>
+          <div class="aula-desc">Aprenda cores, fontes e espaçamentos. Transforme uma página sem estilo em algo que você vai querer mostrar.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 25 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+        <div class="aula-seta">→</div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="flexbox">
+        <div class="aula-icone icone-rosa">📐</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 01.4</div>
+          <div class="aula-titulo">Layout com Flexbox</div>
+          <div class="aula-desc">Aprenda a organizar elementos lado a lado, centralizar conteúdo e criar layouts que funcionam em qualquer tela.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 30 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+        <div class="aula-seta">→</div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="projeto-html-css">
+        <div class="aula-icone icone-rosa">🏆</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 01.5</div>
+          <div class="aula-titulo">Projeto: sua página de apresentação</div>
+          <div class="aula-desc">Coloque tudo em prática criando uma página pessoal com foto, bio e links. O seu primeiro projeto real.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 40 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+        <div class="aula-seta">→</div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- MÓDULO 02 -->
+  <div class="modulo reveal" id="mod2">
+    <div class="modulo-header" onclick="toggle('mod2')">
+      <div class="modulo-num">02</div>
+      <div class="modulo-info">
+        <div class="modulo-nome">Interatividade</div>
+        <div class="modulo-desc">Dê vida ao seu site com JavaScript: eventos, funções e seu primeiro projeto dinâmico.</div>
+        <div class="modulo-tags">
+          <span class="tag-chip">JavaScript</span>
+          <span class="tag-chip">DOM</span>
+          <span class="tag-chip">Projeto</span>
+        </div>
+      </div>
+      <div class="modulo-meta">
+        <div class="modulo-status status-disponivel">✦ Disponível</div>
+        <div class="modulo-meta-aulas">5 aulas · ~2h30</div>
+        <div class="modulo-chevron">▾</div>
+      </div>
+    </div>
+    <div class="modulo-aulas">
+
+      <button type="button" class="aula" data-lesson="js-intro">
+        <div class="aula-icone icone-lilas">⚡</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 02.1</div>
+          <div class="aula-titulo">O que é JavaScript e para que serve?</div>
+          <div class="aula-desc">Entenda como o JS transforma páginas estáticas em experiências interativas.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 15 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="js-variaveis">
+        <div class="aula-icone icone-lilas">🔢</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 02.2</div>
+          <div class="aula-titulo">Variáveis, tipos e operadores</div>
+          <div class="aula-desc">Os blocos básicos do JS: como guardar e manipular informações no seu código.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 25 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="js-dom">
+        <div class="aula-icone icone-lilas">🖱️</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 02.3</div>
+          <div class="aula-titulo">Eventos e o DOM</div>
+          <div class="aula-desc">Faça sua página reagir a cliques, digitação e outras ações da usuária.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 30 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="js-funcoes">
+        <div class="aula-icone icone-lilas">🔄</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 02.4</div>
+          <div class="aula-titulo">Funções e lógica</div>
+          <div class="aula-desc">Aprenda a organizar seu código em funções e tomar decisões com if/else.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 30 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="js-quiz">
+        <div class="aula-icone icone-lilas">🏆</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 02.5</div>
+          <div class="aula-titulo">Projeto: quiz interativo</div>
+          <div class="aula-desc">Construa um quiz de múltipla escolha completo — com pontuação e resultado no final.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 50 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- MÓDULO 03 -->
+  <div class="modulo reveal" id="mod3">
+    <div class="modulo-header" onclick="toggle('mod3')">
+      <div class="modulo-num">03</div>
+      <div class="modulo-info">
+        <div class="modulo-nome">Portfólio</div>
+        <div class="modulo-desc">Monte seu portfólio profissional e publique seus projetos no ar com GitHub Pages.</div>
+        <div class="modulo-tags">
+          <span class="tag-chip">Git</span>
+          <span class="tag-chip">GitHub</span>
+          <span class="tag-chip">Deploy</span>
+        </div>
+      </div>
+      <div class="modulo-meta">
+        <div class="modulo-status status-disponivel">✦ Disponível</div>
+        <div class="modulo-meta-aulas">5 aulas · ~3h</div>
+        <div class="modulo-chevron">▾</div>
+      </div>
+    </div>
+    <div class="modulo-aulas">
+
+      <button type="button" class="aula" data-lesson="git-intro">
+        <div class="aula-icone icone-verde">🗂️</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 03.1</div>
+          <div class="aula-titulo">O que é Git e por que usar?</div>
+          <div class="aula-desc">Entenda o sistema de controle de versão que toda desenvolvedora precisa conhecer.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 20 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="git-comandos">
+        <div class="aula-icone icone-verde">⌨️</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 03.2</div>
+          <div class="aula-titulo">Primeiros comandos Git</div>
+          <div class="aula-desc">init, add, commit, push — os comandos essenciais que você vai usar todo dia.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 30 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="github-perfil">
+        <div class="aula-icone icone-verde">🐙</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 03.3</div>
+          <div class="aula-titulo">Criando seu perfil no GitHub</div>
+          <div class="aula-desc">Configure seu perfil, crie repositórios e faça seu primeiro push para o GitHub.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 25 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="github-pages">
+        <div class="aula-icone icone-verde">🚀</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 03.4</div>
+          <div class="aula-titulo">Publicando com GitHub Pages</div>
+          <div class="aula-desc">Coloque seu site no ar gratuitamente em minutos — com domínio próprio no futuro.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 20 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="aula" data-lesson="portfolio-final">
+        <div class="aula-icone icone-verde">🏆</div>
+        <div class="aula-info">
+          <div class="aula-num">Aula 03.5</div>
+          <div class="aula-titulo">Projeto: portfólio completo no ar</div>
+          <div class="aula-desc">Una tudo — HTML, CSS, JS e GitHub Pages — em um portfólio profissional publicado e com seu link.</div>
+          <div class="aula-meta">
+            <span class="aula-tempo">⏱ 60 min</span>
+            <span class="aula-badge badge-livre">Grátis</span>
+          </div>
+        </div>
+      </button>
+
+    </div>
+  </div>
+
+</section>
+
+
+<!-- DETALHE DA AULA -->
+<div class="lesson-modal" id="lessonModal" aria-hidden="true">
+  <div class="lesson-box" role="dialog" aria-modal="true" aria-labelledby="lessonTitle">
+    <div class="lesson-top">
+      <div>
+        <div class="lesson-kicker" id="lessonKicker">Aula</div>
+        <h2 class="lesson-title" id="lessonTitle">Título da aula</h2>
+      </div>
+      <button class="lesson-close" type="button" onclick="closeLesson()" aria-label="Fechar">×</button>
+    </div>
+    <div class="lesson-body" id="lessonBody"></div>
+  </div>
+</div>
+
+<!-- CTA FINAL -->
+<section class="cta-final reveal">
+  <div class="section-tag" style="justify-content:center">Pronta para começar?</div>
+  <h2>Seu primeiro código<br>está a um clique de <em>distância</em></h2>
+  <p>Comece pelo Módulo 01 agora — é gratuito, em português e no seu ritmo.</p>
+  <a href="#mod1" class="btn-rosa">Começar o módulo 01</a>
+  <a href="index.html#comunidade" class="btn-outline-branco">Entrar na comunidade</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 DevGirl BR · Feito com 💜 em São Paulo</span>
+  <div style="display:flex;gap:20px">
+    <a href="index.html">Home</a>
+    <a href="#">Tutoriais</a>
+    <a href="#">Instagram</a>
+    <a href="#">Sobre</a>
+  </div>
+</footer>
+
+<script>
+
+  const lessons = {
+    internet: {
+      kicker: "Aula 01.1 · Fundamentos",
+      title: "Como a internet funciona?",
+      intro: "Antes de escrever código, vale entender o caminho que acontece quando você abre um site. Você não precisa decorar termos: a ideia é construir um modelo mental simples.",
+      sections: [
+        ["Entenda", "<p>Quando você digita um endereço no navegador, ele precisa encontrar o servidor que hospeda aquele site e pedir os arquivos necessários. O navegador então interpreta esses arquivos e monta a página que você vê.</p><p>Para esta trilha, pense em três peças: <strong>navegador</strong> (onde você vê o site), <strong>servidor</strong> (onde os arquivos podem estar hospedados) e <strong>HTML/CSS/JavaScript</strong> (o conteúdo, aparência e comportamento da página).</p>"],
+        ["Seu objetivo", "<ul><li>Conseguir explicar, com suas palavras, o que um navegador faz.</li><li>Entender a diferença entre uma página local e uma página publicada.</li><li>Estar pronta para criar sua primeira página.</li></ul>"],
+        ["Pratique", "<ol><li>Abra um site que você usa todos os dias.</li><li>Abra as ferramentas de desenvolvedor do navegador.</li><li>Observe o HTML de um elemento simples, como um título.</li><li>Não tente entender tudo ainda: apenas perceba que a página é construída por elementos.</li></ol>"]
+      ],
+      links: [
+        ["MDN · Começando na Web", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started", "Leitura"],
+        ["MDN · Seu primeiro site", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started/Your_first_website", "Guia"]
+      ],
+      tip: "Não tente memorizar como a internet funciona em detalhes. Nesta etapa, o importante é entender o caminho geral."
+    },
+    html: {
+      kicker: "Aula 01.2 · HTML",
+      title: "Sua primeira página HTML",
+      intro: "HTML é usado para estruturar o conteúdo de uma página. Nesta aula você vai criar uma página simples e entender as tags mais importantes para começar.",
+      sections: [
+        ["O que você vai aprender", "<ul><li>O que são elementos e tags.</li><li>Como criar títulos, parágrafos e links.</li><li>Como organizar uma página com <code>html</code>, <code>head</code> e <code>body</code>.</li></ul>"],
+        ["Exemplo", "<p>Comece pequeno. Crie um arquivo chamado <code>index.html</code> e experimente:</p><pre class=\"lesson-code\">&lt;!DOCTYPE html&gt;\n&lt;html lang=\"pt-BR\"&gt;\n  &lt;head&gt;\n    &lt;meta charset=\"UTF-8\"&gt;\n    &lt;title&gt;Minha primeira página&lt;/title&gt;\n  &lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1&gt;Olá, mundo!&lt;/h1&gt;\n    &lt;p&gt;Estou aprendendo HTML.&lt;/p&gt;\n    &lt;a href=\"https://example.com\"&gt;Meu primeiro link&lt;/a&gt;\n  &lt;/body&gt;\n&lt;/html&gt;</pre>"],
+        ["Pratique", "<ol><li>Troque o título.</li><li>Escreva três coisas sobre você.</li><li>Adicione uma imagem e um link.</li><li>Abra o arquivo no navegador e veja o resultado.</li></ol>"]
+      ],
+      links: [
+        ["MDN · Introdução ao HTML", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Structuring_content", "Leitura"],
+        ["freeCodeCamp em Português · Curso introdutório de HTML", "https://www.youtube.com/watch?v=ijv8-PeLZ_o", "Vídeo gratuito"]
+      ],
+      tip: "Não copie o código sem entender. Faça uma pequena alteração depois de cada exemplo e observe o que muda."
+    },
+    css: {
+      kicker: "Aula 01.3 · CSS",
+      title: "Deixando bonito com CSS",
+      intro: "HTML organiza o conteúdo; CSS controla a aparência e o layout. Você vai aprender o suficiente para transformar uma página simples em algo que tenha a sua cara.",
+      sections: [
+        ["Conceito", "<p>CSS funciona com regras. Você escolhe um elemento por meio de um seletor e define propriedades como cor, tamanho, fonte, margem e espaçamento.</p>"],
+        ["Exemplo", "<pre class=\"lesson-code\">body {\n  font-family: Arial, sans-serif;\n  background: #f5eef5;\n}\n\nh1 {\n  color: #e8477a;\n  font-size: 2rem;\n}</pre>"],
+        ["Pratique", "<ol><li>Crie um arquivo <code>style.css</code>.</li><li>Ligue o CSS ao HTML com <code>&lt;link&gt;</code>.</li><li>Altere a cor do fundo.</li><li>Experimente diferentes tamanhos de fonte e espaçamentos.</li></ol>"]
+      ],
+      links: [
+        ["MDN · Primeiros passos com CSS", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Styling_basics", "Leitura"],
+        ["W3Schools · HTML & CSS", "https://www.w3schools.com/htmlcss/", "Tutorial gratuito"],
+        ["W3Schools · Vídeos", "https://www.w3schools.com/videos/", "Vídeos"]
+      ],
+      tip: "Não comece decorando dezenas de propriedades. Aprenda poucas propriedades e use-as em um projeto real."
+    },
+    flexbox: {
+      kicker: "Aula 01.4 · CSS Layout",
+      title: "Layout com Flexbox",
+      intro: "Flexbox ajuda a organizar elementos em uma dimensão: por exemplo, colocando cards lado a lado, centralizando conteúdo ou criando uma barra de navegação.",
+      sections: [
+        ["Comece com o modelo mental", "<p>Você transforma um elemento em um <em>flex container</em> com <code>display: flex</code>. Depois controla a posição dos elementos internos com propriedades como <code>justify-content</code>, <code>align-items</code> e <code>gap</code>.</p>"],
+        ["Exemplo", "<pre class=\"lesson-code\">.cards {\n  display: flex;\n  gap: 16px;\n  justify-content: center;\n  align-items: center;\n}\n\n.card {\n  padding: 20px;\n}</pre>"],
+        ["Pratique", "<ol><li>Crie três cards.</li><li>Coloque-os lado a lado.</li><li>Teste diferentes valores de <code>justify-content</code>.</li><li>Adicione <code>flex-wrap: wrap</code> e diminua a janela do navegador para observar o comportamento.</li></ol>"]
+      ],
+      links: [
+        ["MDN · Conceitos básicos do Flexbox", "https://developer.mozilla.org/pt-BR/docs/Web/CSS/Guides/Flexible_box_layout/Basic_concepts", "Guia"],
+        ["MDN · CSS Layout", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/CSS_layout", "Trilha"]
+      ],
+      tip: "Flexbox fica muito mais fácil quando você altera uma propriedade por vez e observa o resultado no navegador."
+    },
+    "projeto-html-css": {
+      kicker: "Aula 01.5 · Projeto",
+      title: "Projeto: sua página de apresentação",
+      intro: "Agora junte HTML e CSS em um projeto pequeno que você pode colocar no seu GitHub. O objetivo não é fazer um site perfeito: é terminar algo que você consiga mostrar.",
+      sections: [
+        ["O que construir", "<p>Crie uma página sobre você. Ela pode ter uma apresentação curta, interesses, habilidades que está aprendendo, links e uma seção com um projeto.</p>"],
+        ["Checklist", "<ul><li>Estrutura HTML semântica.</li><li>Título e descrição.</li><li>Imagem ou avatar.</li><li>Links para projetos ou redes profissionais.</li><li>CSS com cores, tipografia e espaçamento.</li><li>Layout que continue utilizável no celular.</li></ul>"],
+        ["Como terminar", "<ol><li>Faça primeiro uma versão simples.</li><li>Teste no navegador.</li><li>Peça para uma amiga tentar usar a página.</li><li>Corrija os problemas que ela encontrar.</li><li>Depois publique o projeto no GitHub Pages.</li></ol>"]
+      ],
+      links: [
+        ["MDN · Seu primeiro site", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started/Your_first_website", "Projeto guiado"],
+        ["GitHub Skills · GitHub Pages", "https://skills.github.com/", "Prática gratuita"]
+      ],
+      tip: "Um projeto pequeno terminado vale mais para seu aprendizado do que dez projetos que ficaram pela metade."
+    },
+
+    "js-intro": {
+      kicker: "Aula 02.1 · JavaScript",
+      title: "O que é JavaScript e para que serve?",
+      intro: "JavaScript é a linguagem que permite adicionar comportamento e interatividade a páginas web. Você vai começar entendendo a ideia antes de decorar sintaxe.",
+      sections: [
+        ["Entenda", "<p>HTML organiza o conteúdo e CSS cuida da aparência. JavaScript permite que a página responda a ações, altere conteúdo e execute lógica.</p><p>Um exemplo simples: quando você clica em um botão e aparece uma mensagem sem recarregar a página, JavaScript pode estar por trás disso.</p>"],
+        ["Primeiro exemplo", "<pre class=\"lesson-code\">const botao = document.querySelector('button');\n\nbotao.addEventListener('click', () => {\n  alert('Olá!');\n});</pre>"],
+        ["Pratique", "<ol><li>Crie uma página com um botão.</li><li>Faça o botão mostrar uma mensagem.</li><li>Depois altere o texto de um título ao clicar.</li></ol>"]
+      ],
+      links: [
+        ["MDN · O que é JavaScript?", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Scripting/What_is_JavaScript", "Leitura"],
+        ["MDN · Primeiros passos com JavaScript", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Scripting", "Trilha gratuita"],
+        ["freeCodeCamp em Português · JavaScript", "https://www.youtube.com/watch?v=aA31cVca_hI", "Vídeo gratuito"]
+      ],
+      tip: "Você não precisa entender todo o JavaScript de uma vez. Primeiro aprenda a observar: entrada → lógica → resultado."
+    },
+    "js-variaveis": {
+      kicker: "Aula 02.2 · JavaScript",
+      title: "Variáveis, tipos e operadores",
+      intro: "Variáveis são uma das primeiras ferramentas que você usa para guardar informações. Aqui você vai aprender a declarar valores e fazer operações simples.",
+      sections: [
+        ["Conceitos", "<ul><li><code>let</code>: valor que pode mudar.</li><li><code>const</code>: referência que você não pretende reatribuir.</li><li>Strings: textos.</li><li>Numbers: números.</li><li>Booleans: verdadeiro ou falso.</li></ul>"],
+        ["Exemplo", "<pre class=\"lesson-code\">const nome = 'Nathalia';\nlet pontos = 0;\nconst aprovado = pontos >= 70;\n\npontos = pontos + 10;</pre>"],
+        ["Pratique", "<ol><li>Crie variáveis para nome, idade e cidade.</li><li>Faça uma soma com dois números.</li><li>Crie uma condição que diga se uma pessoa atingiu uma meta.</li></ol>"]
+      ],
+      links: [
+        ["MDN · Gramática e tipos", "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Grammar_and_types", "Leitura"],
+        ["MDN · Operadores", "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Expressions_and_operators", "Guia"]
+      ],
+      tip: "Quando aprender uma nova sintaxe, mude os valores e veja o resultado. Experimentar é parte do aprendizado."
+    },
+    "js-dom": {
+      kicker: "Aula 02.3 · DOM",
+      title: "Eventos e o DOM",
+      intro: "O DOM é uma representação da página que o JavaScript consegue acessar e modificar. É aqui que seu site começa a responder às pessoas.",
+      sections: [
+        ["O que é o DOM?", "<p>Quando o navegador carrega seu HTML, ele cria uma estrutura que representa os elementos da página. O JavaScript pode encontrar esses elementos e mudar texto, classes, atributos e muito mais.</p>"],
+        ["Exemplo", "<pre class=\"lesson-code\">const titulo = document.querySelector('h1');\nconst botao = document.querySelector('#trocar');\n\nbotao.addEventListener('click', () => {\n  titulo.textContent = 'Você clicou!';\n});</pre>"],
+        ["Pratique", "<ol><li>Crie um botão.</li><li>Selecione-o com <code>querySelector</code>.</li><li>Use <code>addEventListener</code> para ouvir o clique.</li><li>Altere um elemento da página.</li></ol>"]
+      ],
+      links: [
+        ["MDN · Manipulação do DOM", "https://developer.mozilla.org/pt-BR/docs/Web/API/Document_Object_Model", "Documentação"],
+        ["MDN · Eventos", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Scripting/Events", "Guia"]
+      ],
+      tip: "Quando algo não funcionar, abra o Console do navegador. Mensagens de erro são pistas para descobrir o que aconteceu."
+    },
+    "js-funcoes": {
+      kicker: "Aula 02.4 · Lógica",
+      title: "Funções e lógica",
+      intro: "Funções permitem organizar seu código em blocos reutilizáveis. Com condições, você também consegue fazer o programa tomar decisões.",
+      sections: [
+        ["Funções", "<p>Uma função recebe dados, executa uma tarefa e pode devolver um resultado. Isso ajuda a evitar repetir o mesmo código.</p>"],
+        ["Exemplo", "<pre class=\"lesson-code\">function verificarNota(nota) {\n  if (nota >= 7) {\n    return 'Aprovada!';\n  }\n  return 'Continue estudando!';\n}\n\nconsole.log(verificarNota(8));</pre>"],
+        ["Pratique", "<ol><li>Crie uma função que receba dois números e retorne a soma.</li><li>Crie uma função que verifique se uma pessoa pode participar de uma atividade.</li><li>Teste valores diferentes.</li></ol>"]
+      ],
+      links: [
+        ["MDN · Funções", "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Functions", "Guia"],
+        ["MDN · Condicionais", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Scripting/Conditionals", "Guia"]
+      ],
+      tip: "Se uma função está ficando enorme, talvez seja hora de dividir o problema em tarefas menores."
+    },
+    "js-quiz": {
+      kicker: "Aula 02.5 · Projeto",
+      title: "Projeto: quiz interativo",
+      intro: "Agora você vai juntar HTML, CSS e JavaScript em um projeto que recebe respostas, verifica resultados e mostra uma pontuação.",
+      sections: [
+        ["Estrutura", "<ul><li>HTML: pergunta, alternativas e botão.</li><li>CSS: organização e feedback visual.</li><li>JavaScript: respostas, pontuação e mudança de pergunta.</li></ul>"],
+        ["Checklist", "<ol><li>Crie pelo menos 5 perguntas.</li><li>Guarde a resposta correta em JavaScript.</li><li>Detecte a alternativa escolhida.</li><li>Atualize a pontuação.</li><li>Mostre o resultado no final.</li></ol>"],
+        ["Desafio extra", "<p>Adicione uma barra de progresso, permita reiniciar o quiz e mostre uma mensagem diferente de acordo com a pontuação.</p>"]
+      ],
+      links: [
+        ["MDN · Um primeiro mergulho no JavaScript", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Scripting/A_first_splash", "Projeto guiado"],
+        ["freeCodeCamp em Português · Fundamentos de JavaScript", "https://www.youtube.com/watch?v=aA31cVca_hI", "Vídeo gratuito"]
+      ],
+      tip: "Não copie um quiz pronto. Construa uma versão simples primeiro e adicione uma funcionalidade por vez."
+    },
+    "git-intro": {
+      kicker: "Aula 03.1 · Git",
+      title: "O que é Git e por que usar?",
+      intro: "Git é um sistema de controle de versão. Ele registra mudanças no projeto e ajuda você a experimentar, voltar atrás e trabalhar de forma organizada.",
+      sections: [
+        ["Pense assim", "<p>Imagine várias versões de um trabalho. Em vez de criar arquivos como <code>site-final-v2-agoraVai.html</code>, o Git registra os pontos importantes da evolução do projeto.</p>"],
+        ["Conceitos principais", "<ul><li>Repositório: onde o projeto e seu histórico ficam.</li><li>Commit: um registro de mudanças.</li><li>Branch: uma linha de desenvolvimento.</li><li>Remote: uma cópia remota, como no GitHub.</li></ul>"],
+        ["Pratique", "<p>Instale o Git, crie uma pasta de teste e faça pequenas mudanças, registrando cada etapa com commits.</p>"]
+      ],
+      links: [
+        ["Git · Livro Pro Git em português", "https://git-scm.com/book/pt-br/v2", "Livro gratuito"],
+        ["GitHub Skills", "https://skills.github.com/", "Exercícios gratuitos"]
+      ],
+      tip: "Você não precisa aprender todos os comandos do Git. Comece entendendo o fluxo: editar → preparar → commit → enviar."
+    },
+    "git-comandos": {
+      kicker: "Aula 03.2 · Git",
+      title: "Primeiros comandos Git",
+      intro: "Aqui você vai praticar o ciclo básico para salvar o histórico do seu projeto e enviá-lo para um repositório remoto.",
+      sections: [
+        ["Fluxo básico", "<pre class=\"lesson-code\">git init\ngit status\ngit add .\ngit commit -m \"Primeiro commit\"\ngit remote add origin URL_DO_REPOSITORIO\ngit push -u origin main</pre>"],
+        ["O que cada um faz", "<ul><li><code>init</code>: inicia o repositório.</li><li><code>status</code>: mostra o estado atual.</li><li><code>add</code>: prepara mudanças.</li><li><code>commit</code>: registra uma versão.</li><li><code>push</code>: envia commits para o remoto.</li></ul>"],
+        ["Pratique", "<ol><li>Crie um projeto simples.</li><li>Faça um primeiro commit.</li><li>Altere um arquivo.</li><li>Faça outro commit com uma mensagem clara.</li><li>Observe o histórico.</li></ol>"]
+      ],
+      links: [
+        ["Git · Reference", "https://git-scm.com/docs", "Documentação"],
+        ["GitHub Docs · Sobre Git", "https://docs.github.com/pt/get-started/using-git/about-git", "Guia"]
+      ],
+      tip: "Escreva mensagens de commit que expliquem a mudança: 'adiciona seção de projetos' é mais útil que 'mudanças'."
+    },
+    "github-perfil": {
+      kicker: "Aula 03.3 · GitHub",
+      title: "Criando seu perfil no GitHub",
+      intro: "GitHub é uma plataforma para hospedar e colaborar em projetos Git. Seu perfil pode funcionar como uma vitrine do que você está aprendendo e construindo.",
+      sections: [
+        ["Monte sua vitrine", "<ul><li>Use uma foto ou avatar que você goste.</li><li>Escreva uma bio curta.</li><li>Fixe projetos que representam suas habilidades.</li><li>Crie README quando ele ajudar a explicar um projeto.</li></ul>"],
+        ["O que colocar em um projeto", "<ul><li>O que o projeto faz.</li><li>Tecnologias utilizadas.</li><li>Como executar ou acessar.</li><li>O que você aprendeu.</li><li>Uma imagem ou demonstração quando fizer sentido.</li></ul>"],
+        ["Pratique", "<p>Escolha um projeto seu e escreva um README curto. Depois peça para outra pessoa ler e tentar entender o projeto sem sua explicação.</p>"]
+      ],
+      links: [
+        ["GitHub Skills", "https://skills.github.com/", "Exercícios gratuitos"],
+        ["GitHub Docs · Comece a usar o GitHub", "https://docs.github.com/pt/get-started", "Guia"]
+      ],
+      tip: "Um GitHub não precisa ter dezenas de repositórios. É melhor ter poucos projetos que você consegue explicar."
+    },
+    "github-pages": {
+      kicker: "Aula 03.4 · Deploy",
+      title: "Publicando com GitHub Pages",
+      intro: "GitHub Pages permite transformar um repositório em um site publicado. É uma maneira simples de colocar seu portfólio no ar sem precisar configurar um servidor próprio.",
+      sections: [
+        ["Passo a passo", "<ol><li>Tenha seu projeto em um repositório.</li><li>Abra Settings → Pages.</li><li>Escolha a fonte de publicação, normalmente uma branch como <code>main</code>.</li><li>Salve e aguarde a publicação.</li><li>Abra o endereço gerado pelo GitHub Pages.</li></ol>"],
+        ["Antes de publicar", "<ul><li>Confira se existe um <code>index.html</code> no local correto.</li><li>Teste os links.</li><li>Confira o site no celular.</li><li>Não coloque senhas, chaves de API ou informações privadas no repositório.</li></ul>"],
+        ["Pratique", "<p>Publique a página criada no Módulo 1 e compartilhe o link com uma amiga para receber feedback.</p>"]
+      ],
+      links: [
+        ["GitHub Docs · Quickstart do GitHub Pages", "https://docs.github.com/en/pages/quickstart", "Guia oficial"],
+        ["GitHub Docs · Criando um site", "https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site", "Tutorial"]
+      ],
+      tip: "O GitHub Pages é ótimo para projetos estáticos. Se seu projeto precisar de um backend ou banco de dados, você vai precisar aprender outras opções de hospedagem."
+    },
+    "portfolio-final": {
+      kicker: "Aula 03.5 · Projeto final",
+      title: "Projeto: seu primeiro portfólio no ar",
+      intro: "Chegou a hora de juntar tudo. Seu portfólio deve apresentar quem você é, o que está aprendendo e projetos que você consegue explicar.",
+      sections: [
+        ["Estrutura sugerida", "<ul><li><strong>Sobre mim:</strong> uma apresentação curta.</li><li><strong>Habilidades:</strong> tecnologias que você realmente está estudando.</li><li><strong>Projetos:</strong> 2 ou 3 projetos com descrição e link.</li><li><strong>Contato:</strong> formas profissionais de falar com você.</li></ul>"],
+        ["Checklist antes de publicar", "<ol><li>Todos os links funcionam?</li><li>O site funciona no celular?</li><li>Os textos estão claros?</li><li>Você consegue explicar cada projeto?</li><li>O GitHub de cada projeto está organizado?</li><li>O site está publicado?</li></ol>"],
+        ["Desafio final", "<p>Peça para uma pessoa que não programa entrar no seu portfólio e encontrar, sem ajuda, quem você é, o que você sabe fazer e como ver seus projetos. Se ela conseguir, sua estrutura está funcionando.</p>"]
+      ],
+      links: [
+        ["MDN · Seu primeiro site", "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started/Your_first_website", "Guia"],
+        ["GitHub Docs · GitHub Pages", "https://docs.github.com/en/pages/quickstart", "Publicação gratuita"],
+        ["GitHub Skills", "https://skills.github.com/", "Prática"]
+      ],
+      tip: "Seu primeiro portfólio não precisa ser perfeito. Ele deve mostrar evolução, curiosidade e projetos que você realmente fez."
+    },
+  };
+
+  function openLesson(id) {
+    const lesson = lessons[id];
+    if (!lesson) return;
+    document.getElementById('lessonKicker').textContent = lesson.kicker;
+    document.getElementById('lessonTitle').textContent = lesson.title;
+
+    let body = `<p class="lesson-intro">${lesson.intro}</p>`;
+    lesson.sections.forEach(section => {
+      body += `<section class="lesson-section"><h3>${section[0]}</h3>${section[1]}</section>`;
+    });
+    body += `<section class="lesson-section"><h3>Recursos gratuitos</h3><div class="lesson-links">`;
+    lesson.links.forEach(link => {
+      body += `<a class="lesson-link" href="${link[1]}" target="_blank" rel="noopener noreferrer"><span>${link[0]}</span><small>${link[2]} ↗</small></a>`;
+    });
+    body += `</div></section>`;
+    body += `<div class="lesson-tip"><strong>💡 Dica do DevGirlsBr</strong><span>${lesson.tip}</span></div>`;
+
+    document.getElementById('lessonBody').innerHTML = body;
+    const modal = document.getElementById('lessonModal');
+    modal.classList.add('aberto');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLesson() {
+    const modal = document.getElementById('lessonModal');
+    modal.classList.remove('aberto');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-lesson]').forEach(aula => {
+    aula.addEventListener('click', () => openLesson(aula.dataset.lesson));
+  });
+
+  document.getElementById('lessonModal').addEventListener('click', (event) => {
+    if (event.target.id === 'lessonModal') closeLesson();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeLesson();
+  });
+
+  function toggle(id) {
+    const mod = document.getElementById(id);
+    mod.classList.toggle('aberto');
+  }
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+
+</body>
+</html>
